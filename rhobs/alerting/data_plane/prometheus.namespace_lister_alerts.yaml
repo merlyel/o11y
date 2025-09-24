@@ -57,3 +57,18 @@ spec:
         alert_team_handle: <!subteam^S05Q1P4Q2TG>
         team: konflux-infra
         runbook_url: https://gitlab.cee.redhat.com/konflux/docs/sop/-/blob/main/namespace-lister/README.md
+
+  - name: namespace-lister-response-time
+    interval: 1m
+    rules:
+    - alert: NamespaceListerResponseTimeHigh
+      expr: sum by(code,source_cluster) (rate(namespace_lister_api_latency_sum[5m])) / sum by(code,source_cluster) (rate(namespace_lister_api_latency_count[5m])) > 0.001
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: Namespace-lister response time is high
+        description: "Namespace-lister response time for '{{ $labels.code }}' code on cluster '{{ $labels.source_cluster }}' is high"
+        alert_team_handle: <!subteam^S06G3MJT516>
+        team: workspaces
+        runbook_url: https://gitlab.cee.redhat.com/konflux/docs/sop/-/blob/main/namespace-lister/README.md
