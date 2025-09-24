@@ -72,3 +72,17 @@ spec:
         alert_team_handle: <!subteam^S06G3MJT516>
         team: workspaces
         runbook_url: https://gitlab.cee.redhat.com/konflux/docs/sop/-/blob/main/namespace-lister/README.md
+  - name: namespace-lister-latency
+    interval: 1m
+    rules:
+    - alert: NamespaceListerResponseTimeHigh
+      expr: histogram_quantile(0.95, sum without (verb) (namespace_lister_api_latency_bucket )) > 0.001
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: Namespace-lister P95 latency time is high
+        description: "Namespace-lister P95 latency for '{{ $labels.code }}' code on cluster '{{ $labels.source_cluster }}' is too high"
+        alert_team_handle: <!subteam^S06G3MJT516>
+        team: workspaces
+        runbook_url: https://gitlab.cee.redhat.com/konflux/docs/sop/-/blob/main/namespace-lister/README.md
