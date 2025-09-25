@@ -62,7 +62,7 @@ spec:
     interval: 1m
     rules:
     - alert: NamespaceListerResponseTimeHigh
-      expr: sum by(code,source_cluster) (rate(namespace_lister_api_latency_sum[5m])) / sum by(code,source_cluster) (rate(namespace_lister_api_latency_count[5m])) > 0.001
+      expr: sum by(code,source_cluster) (rate(namespace_lister_api_latency_sum[5m])) / sum by(code,source_cluster) (rate(namespace_lister_api_latency_count[5m])) > 0.01
       for: 10m
       labels:
         severity: warning
@@ -76,7 +76,7 @@ spec:
     interval: 1m
     rules:
     - alert: NamespaceListerResponseTimeHigh
-      expr: histogram_quantile(0.95, sum without (verb) (namespace_lister_api_latency_bucket )) > 0.001
+      expr: histogram_quantile(0.95, sum without (verb) (namespace_lister_api_latency_bucket )) > 0.01
       for: 10m
       labels:
         severity: warning
